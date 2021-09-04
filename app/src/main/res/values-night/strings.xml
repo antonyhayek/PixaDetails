@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_login">Login</string>
+    <string name="text_register_prompt">Don\'t have an account? Register now</string>
+    <string name="text_confirm_password">Confirm Password</string>
+    <string name="text_register">Register</string>
+    <string name="text_login_prompt">Already registered? Login now</string>
+    <string name="text_register_now">Register now</string>
+    <string name="text_login_now">Login now</string>
+    <string name="text_invalid_email">Invalid Email Address</string>
+    <string name="text_email_required">Email is required</string>
+    <string name="text_password_required">Password is required</string>
+    <string name="text_password_length_not_valid">Password must be between 6 to 12 characters</string>
+    <string name="text_password_confirmation_required">Please retype your password</string>
+    <string name="text_passwords_should_match">Passwords should match</string>
+    <string name="text_age">Age</string>
+    <string name="text_age_required">Age is required</string>
+    <string name="text_age_restriction">Age must be between 18 and 99</string>
+    <string name="text_internet_not_available">Make sure your internet is available</string>
+</resources>
