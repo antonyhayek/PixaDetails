@@ -7,12 +7,16 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiInterface {
 
 
     @GET("?key=23213144-40e4806fb725ffdd769da4530&category=computer") /*&image_type=photo*/
-    suspend fun getPixabayImages() : Response<PixabayResponse>
+    suspend fun getPixabayImages(
+        @Query("page") page: Int,
+        @Query("per_page") per_page: Int
+    ) : PixabayResponse
 
 
     companion object{

@@ -9,6 +9,7 @@ import com.antonyhayek.pixadetails.data.repositories.HomeRepository
 import com.antonyhayek.pixadetails.data.repositories.LoginRepository
 import com.antonyhayek.pixadetails.data.repositories.RegisterRepository
 import com.antonyhayek.pixadetails.ui.home.HomeViewModelFactory
+import com.antonyhayek.pixadetails.ui.home.ImageDataSource
 import com.antonyhayek.pixadetails.ui.login.LoginViewModelFactory
 import com.antonyhayek.pixadetails.ui.register.RegisterViewModelFactory
 import org.kodein.di.Kodein
@@ -35,6 +36,8 @@ class MVVMApp : Application(), KodeinAware {
 
         bind() from singleton { RegisterRepository(instance()) }
         bind() from singleton { RegisterViewModelFactory(instance()) }
+
+        bind() from singleton { ImageDataSource(instance()) }
     }
 
 
