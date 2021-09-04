@@ -15,6 +15,7 @@ import com.antonyhayek.pixadetails.R
 import com.antonyhayek.pixadetails.databinding.FragmentDetailsBinding
 import com.antonyhayek.pixadetails.ui.login.LoginViewModel
 import com.antonyhayek.pixadetails.ui.login.LoginViewModelFactory
+import com.antonyhayek.pixadetails.utils.humanReadableByteCountSI
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -47,6 +48,8 @@ class DetailsFragment : Fragment(), KodeinAware {
         arguments?.let { it ->
             DetailsFragmentArgs.fromBundle(it).let {
                 binding.image = it.image
+
+                binding.chipImageSize.text = humanReadableByteCountSI(it.image.imageSize)
 
                 val tags: List<String> = it.image.tags.split(",").toList()
 
