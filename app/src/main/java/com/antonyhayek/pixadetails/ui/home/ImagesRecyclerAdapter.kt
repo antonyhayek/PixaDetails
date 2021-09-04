@@ -1,65 +1,59 @@
 package com.antonyhayek.pixadetails.ui.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.RecyclerView
-import com.antonyhayek.pixadetails.R
 import com.antonyhayek.pixadetails.data.remote.responses.ImageResponse
+
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.antonyhayek.pixadetails.databinding.ItemRecyclerImageBinding
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 class ImagesRecyclerAdapter(
-    private val images: MutableList<ImageResponse>,
-    private val activity: FragmentActivity,
     private val clickListener: (ImageResponse) -> Unit
-    ) :
-    RecyclerView.Adapter<ImagesRecyclerAdapter.ViewHolder>()
-    {
+) :
+    PagingDataAdapter<ImageResponse, ImagesRecyclerAdapter.ImageViewHolder>(ImagesComparator) {
 
-        class ViewHolder(val binding: ItemRecyclerImageBinding) : View.OnClickListener,
-            RecyclerView.ViewHolder(binding.root) {
-            private lateinit var image: ImageResponse
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ImageViewHolder {
+        val binding = ItemRecyclerImageBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ImageViewHolder(binding)
+    }
 
-            init {
-                itemView.setOnClickListener(this)
+
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val item = getItem(position)
+        item?.let { holder.bindImage(it) }
+    }
+
+    inner class ImageViewHolder(private val binding: ItemRecyclerImageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bindImage(item: ImageResponse) /*= with(binding)*/ {
+            binding.image = item
+            binding.executePendingBindings()
+
+            itemView.setOnClickListener {
+                clickListener(item)
             }
-
-
-            fun bind(
-                image: ImageResponse,
-                activity: FragmentActivity,
-                clickListener: (ImageResponse) -> Unit
-            ) {
-                binding.image = image
-                binding.executePendingBindings()
-
-                //set to true for ellipsize marquee to work
-                binding.tvUserName.isSelected = true
-
-                itemView.setOnClickListener {
-                    clickListener(image)
-                }
-            }
-
-            override fun onClick(view: View?) {}
-        }
-
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = ItemRecyclerImageBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-            return ViewHolder(binding)
-        }
-
-        override fun getItemCount() = images.size
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(images[position], activity, clickListener)
         }
     }
+
+    object ImagesComparator : DiffUtil.ItemCallback<ImageResponse>() {
+        override fun areItemsTheSame(oldItem: ImageResponse, newItem: ImageResponse): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ImageResponse, newItem: ImageResponse): Boolean {
+            return oldItem == newItem
+        }
+    }
+}
+
