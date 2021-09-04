@@ -20,12 +20,15 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.antonyhayek.pixadetails.R
 import com.antonyhayek.pixadetails.data.remote.config.Resource
 import com.antonyhayek.pixadetails.data.remote.requests.LoginRequest
 import com.antonyhayek.pixadetails.databinding.FragmentLoginBinding
 import com.antonyhayek.pixadetails.utils.isValidEmail
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -50,8 +53,23 @@ class LoginFragment : Fragment(), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
+        checkIfLoggedIn()
+
         setLayoutListeners()
         setRegisterSpannableString()
+    }
+
+    private fun checkIfLoggedIn() {
+
+
+        viewModel.isLoggedIn.observe(viewLifecycleOwner) { userPrefs ->
+
+            if(userPrefs.isLoggedIn) {
+                if (findNavController().currentDestination?.id == R.id.loginFragment) {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+                }
+            }
+        }
     }
 
     private fun initViewModel() {
@@ -66,16 +84,18 @@ class LoginFragment : Fragment(), KodeinAware {
         binding.btnLogin.setOnClickListener {
 
             if (credentialsValid()) {
+                binding.pbLoading.visibility = View.VISIBLE
 
                 viewModel.loginResponseLiveData(LoginRequest(binding.etEmail.text.toString(), binding.etPassword.text.toString())).observe(viewLifecycleOwner, Observer {
 
-
                     when (it) {
                         is Resource.Success -> {
+                            binding.pbLoading.visibility = View.GONE
 
-                            if (it.value.body() != null) {
-                                Toast.makeText(requireContext(), it.value.body()!!.data.email, Toast.LENGTH_SHORT).show()
+                           lifecycleScope.launch {
+                                viewModel.updateIsLoggedIn(true)
                             }
+
 
                             if (findNavController().currentDestination?.id == R.id.loginFragment) {
                                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
@@ -83,7 +103,7 @@ class LoginFragment : Fragment(), KodeinAware {
 
                         }
                         is Resource.Failure -> {
-
+                            binding.pbLoading.visibility = View.GONE
 
                         }
 

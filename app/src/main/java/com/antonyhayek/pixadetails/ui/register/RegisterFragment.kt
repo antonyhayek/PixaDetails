@@ -69,7 +69,8 @@ class RegisterFragment : Fragment(), KodeinAware {
         binding.btnRegister.setOnClickListener {
 
             if (credentialsValid()) {
-
+                binding.pbLoading.visibility = View.VISIBLE
+                
                 viewModel.registerResponseLiveData(
                     RegisterRequest(
                         binding.etEmail.text.toString(),
@@ -81,6 +82,7 @@ class RegisterFragment : Fragment(), KodeinAware {
 
                     when (it) {
                         is Resource.Success -> {
+                            binding.pbLoading.visibility = View.GONE
 
                             if (it.value.body() != null) {
                                 Toast.makeText(
@@ -96,7 +98,7 @@ class RegisterFragment : Fragment(), KodeinAware {
 
                         }
                         is Resource.Failure -> {
-
+                            binding.pbLoading.visibility = View.GONE
 
                         }
 

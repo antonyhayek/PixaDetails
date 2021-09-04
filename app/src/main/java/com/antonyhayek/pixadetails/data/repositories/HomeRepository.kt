@@ -5,8 +5,7 @@ import androidx.paging.*
 import com.antonyhayek.pixadetails.data.base.BaseRepository
 import com.antonyhayek.pixadetails.data.remote.ApiInterface
 import com.antonyhayek.pixadetails.data.remote.responses.ImageResponse
-import com.antonyhayek.pixadetails.ui.home.HomeViewModel
-import com.antonyhayek.pixadetails.ui.home.ImageDataSource
+import com.antonyhayek.pixadetails.ui.home.ImagePaginationDataSource
 import kotlinx.coroutines.flow.Flow
 
 class HomeRepository(
@@ -22,21 +21,19 @@ class HomeRepository(
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
-                ImageDataSource(api)
+                ImagePaginationDataSource(api)
             }
         ).flow
     }
 
-    /**
-     * The same thing but with Livedata
-     */
+
     fun getPixabayImagesLiveData(
 
     ): LiveData<PagingData<ImageResponse>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
-                ImageDataSource(api)
+                ImagePaginationDataSource(api)
             }
         ).liveData
 

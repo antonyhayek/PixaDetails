@@ -6,7 +6,7 @@ import com.antonyhayek.pixadetails.data.remote.ApiInterface
 import com.antonyhayek.pixadetails.data.remote.responses.ImageResponse
 
 
-class ImageDataSource(
+class ImagePaginationDataSource(
     private val api: ApiInterface
 ) : PagingSource<Int, ImageResponse>() {
 

@@ -22,7 +22,7 @@ class HomeViewModel(private val homeRepository: HomeRepository) : ViewModel() {
     }*/
 
     /* val pixabayImages = Pager(PagingConfig(pageSize = 20)) {
-         ImageDataSource(api)
+         ImagePaginationDataSource(api)
      }.flow.cachedIn(viewModelScope)*/
 
     private var currentResult: Flow<PagingData<ImageResponse>>? = null
@@ -35,9 +35,6 @@ class HomeViewModel(private val homeRepository: HomeRepository) : ViewModel() {
         return newResult
     }
 
-    /**
-     * Same thing but with Livedata
-     */
 
     fun getPixabayImagesLiveData(): LiveData<PagingData<ImageResponse>> {
         return  homeRepository.getPixabayImagesLiveData().cachedIn(viewModelScope)

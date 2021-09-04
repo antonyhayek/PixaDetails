@@ -57,9 +57,10 @@ class HomeFragment : Fragment(), KodeinAware {
 
         }*/
 
-        lifecycleScope.launch {
-            viewModel.getPixabayImagesLiveData().observe(viewLifecycleOwner, Observer {
 
+        lifecycleScope.launch {
+
+            viewModel.getPixabayImagesLiveData().observe(viewLifecycleOwner, Observer {
                 adapter.submitData(viewLifecycleOwner.lifecycle, it)
             })
         }
